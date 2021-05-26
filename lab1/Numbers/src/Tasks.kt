@@ -2,16 +2,26 @@ import java.lang.Math.abs
 
 fun main() {
     val number = inputNumber()
-    println()
 
     // task 6
     // println("Sum of digits of number: ${sumDigits(number)}")
 
     // task 7
-    println("Sum of digits: ${sumDigits(number)}")
-    println("Max digit: ${maxDigit(number)}")
-    println("Min digit: ${minDigit(number)}")
+    // println("Sum of digits: ${sumDigits(number)}")
+    // println("Max digit: ${maxDigit(number)}")
+    // println("Min digit: ${minDigit(number)}")
+    // println("Mult of digits: ${multDigits(number)}")
+
+    // task 8.1
+    // println("Max prime divisor of number: ${maxPrimeDivisor(number)}")
+
+    // task 8.2
+    // println("Mult of digits not divisible by 5: ${multDigitsNotDivBy(number,5)}")
+
+    // task 8.3
+    println("\nMax odd not prime divisor of number: ${maxOddNotPrimeDiv(number)}")
     println("Mult of digits: ${multDigits(number)}")
+    println("\nTheir GCD: ${task8(number)}")
 }
 
 // ввод числа (рекурсия, пока число некорректно)
@@ -83,3 +93,96 @@ fun multDigits(number: Int): Int =
         abs(number % 10)
     else
         multDigits(number / 10) * abs(number % 10)
+
+// task 8.1: максимальный простой делитель числа
+// *допущение, что простой делитель 1 - 1*
+fun maxPrimeDivisor(number: Int): Int {
+    fun maxPrimeDivisor(number: Int, divisor: Int): Int =
+        if (isNumberPrime(divisor) && (number % divisor == 0))
+            divisor
+        else
+            maxPrimeDivisor(number,divisor - 1)
+
+    try {
+        return if ((number == 1) || isNumberPrime(number))
+            number
+        else
+            maxPrimeDivisor(number, number / 2)
+    }
+    catch(e: ArithmeticException)
+    {
+        throw e
+    }
+}
+
+// проверка, простое ли число
+fun isNumberPrime(number: Int): Boolean {
+    fun isNumberPrime(number: Int, divisor: Int): Boolean =
+        when {
+            (divisor == 1) -> true
+            (number % divisor == 0) -> false
+            else -> isNumberPrime(number, divisor - 1)
+        }
+
+    return when (number) {
+        0 -> throw ArithmeticException("0 has no prime divisors")
+        1 -> false
+        2 -> true
+        else -> isNumberPrime(number, number / 2)
+    }
+}
+
+// task 8.2: произведение цифр числа, не делящихся на 5
+// *если число полностью состоит из 5, то результат - 1*
+fun multDigitsNotDivBy(number: Int, notDivisor: Int): Int =
+    when {
+        (number / 10 == 0) && (number % 10 != notDivisor) -> abs(number % 10)
+        (number / 10 == 0) -> 1
+        (number % 10 != notDivisor) -> multDigitsNotDivBy(number / 10, notDivisor) * abs(number % 10)
+        else -> multDigitsNotDivBy(number / 10, notDivisor)
+    }
+
+// task 8.3: НОД максимального нечетного непростого
+// делителя числа и прозведения цифр данного числа
+// *если само число - 0, то НОД - 1*
+// *если произведение цифр числа - 0, то НОД - 1*
+// *пример: 45*
+fun task8 (number: Int): Int {
+    val maxPrimeDiv: Int
+    try {
+        maxPrimeDiv = maxOddNotPrimeDiv(number)
+    }
+    catch(e: ArithmeticException)
+    {
+        throw e
+    }
+
+    val multDigits = multDigits(number)
+
+    if (multDigits == 0)
+        throw ArithmeticException("Unable to find a GCD with the argument 0")
+
+    return numbersGCD(maxPrimeDiv, multDigits)
+}
+
+// максимальный нечётный непростой делитель
+fun maxOddNotPrimeDiv(number: Int): Int {
+    fun maxOddNotPrimeDiv(number: Int, divisor: Int): Int =
+        if (!isNumberPrime(divisor) && (number % divisor == 0) && (divisor % 2 != 0))
+            divisor
+        else
+            maxOddNotPrimeDiv(number, divisor - 1)
+
+    return if ((number % 2 != 0) && !isNumberPrime(number))
+        number
+    else
+        maxOddNotPrimeDiv(number, number / 2)
+}
+
+// наиобольший общий делитель
+fun numbersGCD(a: Int, b: Int): Int =
+    when {
+        (a == b) -> a
+        (a > b) -> numbersGCD(a - b, b)
+        else -> numbersGCD(a, b - a)
+    }
