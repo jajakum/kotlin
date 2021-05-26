@@ -1,7 +1,14 @@
 import java.lang.Math.abs
+import java.util.zip.DataFormatException
 
 fun main() {
-    launchMenu()
+    // launchMenu()
+
+    // task 10.19
+    // println("Number of Sundays: ${problem19()}")
+
+    // task 10.39
+    println("P = ${problem39()}")
 }
 
 // task 9: Реализовать возможность пользователю выбирать,
@@ -221,3 +228,67 @@ fun numbersGCD(a: Int, b: Int): Int =
         (a > b) -> numbersGCD(a - b, b)
         else -> numbersGCD(a, b - a)
     }
+
+// task 10.19: количество месяцев, начавшихся с воскресенья
+// диапазон [1 января 1901; 31 декабря 2000]
+fun problem19(): Int {
+    fun numberOfDays(month: Int, year: Int): Int =
+        when {
+            (month == 1) -> 31
+            (month == 2) && (year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0)) -> 29
+            (month == 2) -> 28
+            (month == 3) -> 31
+            (month == 4) -> 30
+            (month == 5) -> 31
+            (month == 6) -> 30
+            (month == 7) -> 31
+            (month == 8) -> 31
+            (month == 9) -> 30
+            (month == 10) -> 31
+            (month == 11) -> 30
+            (month == 12) -> 31
+            else -> throw DataFormatException("month isn't in range from 1 to 12")
+        }
+
+    fun problem19(dayOfWeek: Int, month: Int, year: Int): Int {
+        return if (!(month == 1 && year == 2001)) {
+            val newDayOfWeek = (numberOfDays(month, year) % 7 + dayOfWeek) % 7
+            val counter =
+                if (newDayOfWeek == 0) 1
+                else 0
+
+            if (month == 12)
+                problem19(newDayOfWeek,1,year + 1) + counter
+            else
+                problem19(newDayOfWeek,month + 1, year) + counter
+        }
+        else 0
+    }
+
+    return problem19(2,1,1901)
+}
+
+// task 10.39: Если p - периметр прямоугольного треугольника, {a, b, c},
+// какое значение при p ≤ 1000 имеет наибольшее количество решений?
+// *размера стека по умолчанию не хватает: Run/Debug Configuration VM Options = -Xss64M*
+// *осторожно: может быть, перегруз по памяти...*
+// *тот самый случай, когда циклы были бы лучше рекурсии - !!!*
+fun problem39(): Int {
+    tailrec fun problem39(p: Int, a: Int, result: Int, solutions: Int, i: Int): Int {
+        return if (a < p / 3) {
+            if (p * (p - 2 * a) % (2 * (p - a)) == 0)
+                problem39(p, a + 1, result, solutions, i + 1)
+            else
+                problem39(p, a + 1, result, solutions, i)
+        }
+        else if (p < 1000) {
+            if (i > solutions)
+                problem39(p + 2, 2, p, i, 0)
+            else
+                problem39(p + 2, 2, result, solutions, 0)
+        }
+        else result
+    }
+
+    return problem39(2,2,0,0,0)
+}
