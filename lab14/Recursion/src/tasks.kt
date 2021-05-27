@@ -82,3 +82,13 @@ fun sumDigitsUp(number: Int): Int =
         abs(number % 10)
     else
         sumDigitsUp(number / 10) + abs(number % 10)
+
+// task 2: сумма цифр числа (хвостовая рекурсия)
+fun sumDigitsTail(number: Int, sum: Int): Int =
+    if (number / 10 == 0)
+        sum + abs(number % 10)
+    else
+        sumDigitsTail(number / 10, sum + abs(number % 10))
+
+fun sumDigitsTail(number: Int): Int =
+    sumDigitsTail(number, 0)
