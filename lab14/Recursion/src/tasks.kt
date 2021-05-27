@@ -178,3 +178,23 @@ fun maxDigitTail(number: Int): Int {
 // функцию и инициализирующее значение по умолчанию (!)
 fun calculate(number: Int, func: (number: Int) -> Int, initValue: Int = 0): Int =
     func(number)
+
+// task 5: функция обход числа, которая принимает число,
+// функцию с двумя аргументами Int, инициализирующее заполнение
+// и функцию c одним аргументом Int, возврщающую true-false (условие для цифр)
+fun calculateWithCondition(number: Int, funCalculate: (number: Int, value: Int) -> Int, funCondition: (number: Int) -> Boolean, initValue: Int = 0) {
+    if (funCondition(number))
+        println("Function result: ${funCalculate(number, initValue)}")
+    else
+        println("Sorry: digits don't satisfy the condition!")
+}
+
+// проверка, все ли цифры в числе больше 5
+fun checkDigits(number: Int): Boolean =
+    if (number % 10 > 5) {
+        if (number / 10 == 0)
+            true
+        else
+            checkDigits(number / 10)
+    }
+    else false
