@@ -92,3 +92,20 @@ fun sumDigitsTail(number: Int, sum: Int): Int =
 
 fun sumDigitsTail(number: Int): Int =
     sumDigitsTail(number, 0)
+
+// task 3.1: проиведение цифр числа (рекурсия вверх)
+fun multDigitsUp(number: Int): Int =
+    if (number / 10 == 0)
+        abs(number % 10)
+    else
+        multDigitsUp(number / 10) * abs(number % 10)
+
+// task 3.1: произведение цифр числа (хвостовая рекурсия)
+fun multDigitsTail(number: Int, mult: Int): Int =
+    if (number / 10 == 0)
+        mult * abs(number % 10)
+    else
+        multDigitsTail(number / 10, mult * abs(number % 10))
+
+fun multDigitsTail(number: Int): Int =
+    multDigitsTail(number, 1)
