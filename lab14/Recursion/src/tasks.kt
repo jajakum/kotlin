@@ -109,3 +109,35 @@ fun multDigitsTail(number: Int, mult: Int): Int =
 
 fun multDigitsTail(number: Int): Int =
     multDigitsTail(number, 1)
+
+// task 3.2: минимальная цифра числа (рекурсия вверх)
+fun minDigitUp(number: Int): Int {
+    val newNumber = number / 10
+    val digit = abs(number % 10)
+
+    return if (newNumber != 0) {
+        val min = minDigitUp(newNumber)
+        if (digit < min)
+            digit
+        else min
+    }
+    else digit
+}
+
+// task 3.2: минимальная цифра числа (хвостовая рекурсия)
+fun minDigitTail(number: Int): Int {
+    fun minDigitTail(number: Int, min: Int): Int {
+        val newNumber = number / 10
+        val digit = abs(number % 10)
+
+        val newMin =
+            if (digit < min)
+                digit
+            else min
+
+        return if (newNumber != 0)
+            minDigitTail(newNumber, newMin)
+        else newMin
+    }
+    return minDigitTail(number, 10)
+}
