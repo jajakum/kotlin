@@ -173,3 +173,8 @@ fun maxDigitTail(number: Int): Int {
     }
     return maxDigitTail(number, -1)
 }
+
+// task 4: функция обход числа, которая принимает число,
+// функцию и инициализирующее значение по умолчанию (!)
+fun calculate(number: Int, func: (number: Int) -> Int, initValue: Int = 0): Int =
+    func(number)
