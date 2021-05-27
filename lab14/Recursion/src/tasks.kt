@@ -253,3 +253,47 @@ fun multDigitsNotDivBy(number: Int, notDivisor: Int): Int =
         (number % 10 != notDivisor) -> multDigitsNotDivBy(number / 10, notDivisor) * abs(number % 10)
         else -> multDigitsNotDivBy(number / 10, notDivisor)
     }
+
+// task 7.3: НОД максимального нечетного непростого
+// делителя числа и прозведения цифр данного числа
+// *если число или произведение цифр числа - 0, то НОД - 1*
+// *пример: 45*
+fun task7_3 (number: Int): Int =
+    try {
+        numbersGCD(maxOddNotPrimeDiv(number), multDigitsUp(number))
+    }
+    catch(e: ArithmeticException) {
+        throw e
+    }
+
+// максимальный нечётный непростой делитель
+fun maxOddNotPrimeDiv(number: Int): Int =
+    try {
+        if ((number % 2 != 0) && !isNumberPrime(number))
+            number
+        else
+            maxOddNotPrimeDiv(number, number / 2)
+    }
+    catch(e: ArithmeticException) {
+        throw e
+    }
+
+fun maxOddNotPrimeDiv(number: Int, divisor: Int): Int =
+    try {
+        if (!isNumberPrime(divisor) && (number % divisor == 0) && (divisor % 2 != 0))
+            divisor
+        else
+            maxOddNotPrimeDiv(number, divisor - 1)
+    }
+    catch(e: ArithmeticException) {
+        throw e
+    }
+
+// наиобольший общий делитель
+fun numbersGCD(a: Int, b: Int): Int =
+    when {
+        ((a <= 0) || (b <= 0)) -> throw ArithmeticException("One of the numbers <= 0")
+        (a == b) -> a
+        (a > b) -> numbersGCD(a - b, b)
+        else -> numbersGCD(a, b - a)
+    }
