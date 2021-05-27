@@ -198,3 +198,48 @@ fun checkDigits(number: Int): Boolean =
             checkDigits(number / 10)
     }
     else false
+
+// task 7.1: максимальный простой делитель числа
+// *допущение, что простой делитель 1 - 1*
+fun maxPrimeDivisor(number: Int): Int =
+    try {
+        if ((number == 1) || isNumberPrime(number))
+            number
+        else
+            maxPrimeDivisor(number, number / 2)
+    }
+    catch(e: ArithmeticException) {
+        throw e
+    }
+
+fun maxPrimeDivisor(number: Int, divisor: Int): Int =
+    try {
+        if (isNumberPrime(divisor) && (number % divisor == 0))
+            divisor
+        else
+            maxPrimeDivisor(number,divisor - 1)
+    }
+    catch(e: ArithmeticException) {
+        throw e
+    }
+
+// проверка, простое ли число
+fun isNumberPrime(number: Int): Boolean =
+    when (number) {
+        0 -> throw ArithmeticException("0 has no prime divisors")
+        1 -> false
+        2 -> true
+        else -> isNumberPrime(number, number / 2)
+    }
+
+fun isNumberPrime(number: Int, divisor: Int): Boolean =
+    try {
+        when {
+            (divisor == 1) -> true
+            (number % divisor == 0) -> false
+            else -> isNumberPrime(number, divisor - 1)
+        }
+    }
+    catch(e: ArithmeticException) {
+        throw e
+    }
