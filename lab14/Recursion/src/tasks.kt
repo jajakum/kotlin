@@ -243,3 +243,13 @@ fun isNumberPrime(number: Int, divisor: Int): Boolean =
     catch(e: ArithmeticException) {
         throw e
     }
+
+// task 7.2: произведение цифр числа, не делящихся на 5
+// *если число полностью состоит из 5, то результат - 1*
+fun multDigitsNotDivBy(number: Int, notDivisor: Int): Int =
+    when {
+        (number / 10 == 0) && (number % 10 != notDivisor) -> abs(number % 10)
+        (number / 10 == 0) -> 1
+        (number % 10 != notDivisor) -> multDigitsNotDivBy(number / 10, notDivisor) * abs(number % 10)
+        else -> multDigitsNotDivBy(number / 10, notDivisor)
+    }
