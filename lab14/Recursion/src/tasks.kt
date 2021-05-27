@@ -141,3 +141,35 @@ fun minDigitTail(number: Int): Int {
     }
     return minDigitTail(number, 10)
 }
+
+// task 3.3: максимальная цифра числа (рекурсия вверх)
+fun maxDigitUp(number: Int): Int {
+    val newNumber = number / 10
+    val digit = abs(number % 10)
+
+    return if (newNumber != 0) {
+        val max = maxDigitUp(newNumber)
+        if (digit > max)
+            digit
+        else max
+    }
+    else digit
+}
+
+// task 3.3: максимальная цифра числа (хвостовая рекурсия)
+fun maxDigitTail(number: Int): Int {
+    fun maxDigitTail(number: Int, max: Int): Int {
+        val newNumber = number / 10
+        val digit = abs(number % 10)
+
+        val newMax =
+            if (digit > max)
+                digit
+            else max
+
+        return if (newNumber != 0)
+            maxDigitTail(newNumber, newMax)
+        else newMax
+    }
+    return maxDigitTail(number, -1)
+}
